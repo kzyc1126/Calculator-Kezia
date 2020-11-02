@@ -101,15 +101,19 @@ class MainActivity : AppCompatActivity() {
             equal = true
             if(currentoperator != "none" && operator == false){
                 input = tv_result.text.toString().toDouble()
-                tv_result.text = calculate(result,input,currentoperator).toString().replace(".0","")
+                calculate(result,input,currentoperator)
+                trailing0(result.toString())
                 operator = true
             } else if (currentoperator !="none" && operator == true){
-                tv_result.text = calculate(result,input,currentoperator).toString().replace(".0","")
+                calculate(result,input,currentoperator)
+                trailing0(result.toString())
             }
 
         }
-        btn_percentage.setOnClickListener(){}
-        simpleoprtpressed("%")
+        btn_percentage.setOnClickListener(){
+            simpleoprtpressed("%")
+        }
+
     }
     fun numbpressed(inputnum:String){
         btn_clear.text = "C"
@@ -121,7 +125,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 else if(inputnum != "0" && tv_result.text == "-0"){
                     input = inputnum.toDouble() * -1
-                    tv_result.text = input.toString().replace(".0","")
+                    trailing0(input.toString())
 
                 }
                 else if ((inputnum == "0" && tv_result.text !== "0") || (inputnum != "0" && tv_result.text !== "0")) {
@@ -139,29 +143,43 @@ class MainActivity : AppCompatActivity() {
 
     }
     fun simpleoprtpressed(inputop:String){
-        input = tv_result.text.toString().toDouble()
+        var input2 = tv_result.text.toString().toDouble()
         when(inputop){
             "^" -> {
                 if(inputop == "^") if(equal == false){
-                    input = Math.pow(input,2.0)
-                    tv_result.text = input.toString().replace(".0","")
+                    input = Math.pow(input2,2.0)
+                    trailing0(input.toString())
                 }
-                else { result = Math.pow(input,2.0)
-                    tv_result.text = result.toString().replace(".0","")
+                else {
+                   input = Math.pow(input2,2.0)
+                    trailing0(input2.toString())
                 }
             }
             "round" -> {
-                result = Math.round(input).toDouble()
-                tv_result.text = result.toString().replace(".0","")
+                result = Math.round(input2).toDouble()
+                trailing0(result.toString())
             }
-            "floor" -> {result = Math.floor(input).toDouble()
-                tv_result.text = result.toString().replace(".0","")
+            "floor" -> {
+                result = Math.floor(input2).toDouble()
+                trailing0(result.toString())
             }
-            "ceil" -> {result = Math.ceil(input).toDouble()
-                tv_result.text = result.toString().replace(".0","")
+            "ceil" -> {result = Math.ceil(input2).toDouble()
+                trailing0(result.toString())
             }
-            "sqrt" -> {result = Math.sqrt(input).toDouble()
-                tv_result.text = result.toString().replace(".0","")
+            "sqrt" -> {
+                input = Math.sqrt(input2).toDouble()
+                trailing0(input.toString())
+            }
+            "%"->{
+                if(input != 0.0 && input2 != 0.0){
+                    input = input * input2 /100
+                    trailing0(input.toString())
+                }
+                else  if(input == 0.0 && input2 != 0.0) {
+                    input = input/100
+                    trailing0(input.toString())
+                }
+
             }
         }
 
@@ -194,11 +212,11 @@ class MainActivity : AppCompatActivity() {
         else if(symbol =="+-"){
             if(result != 0.0 && input > 0.0){
                 input *= -1
-                tv_result.text = input.toString().replace(".0","")
+                trailing0(input.toString())
             }
             else{
-                result *=1
-                tv_result.text = result.toString().replace(".0","")
+                result *= -1
+                trailing0(result.toString())
             }
 
 
@@ -214,4 +232,14 @@ class MainActivity : AppCompatActivity() {
         }
         return this.result
     }
+    fun trailing0(input:String){
+        if (input.takeLast(2).toString() == ".0"){
+            tv_result.text = input.replace(".0","")
+        }
+        else {
+            tv_result.text = input
+        }
+
+    }
 }
+
