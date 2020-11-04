@@ -120,14 +120,15 @@ class MainActivity : AppCompatActivity() {
         clickedop=""
         if(tv_result.text.toString().length <9) {
             if ( operator == false){
-                if ((inputnum != "0" && tv_result.text == "0") || (inputnum != "0" && equal == false && tv_result.text == "0" )) {
-                    tv_result.text = inputnum
-                }
-                else if(inputnum != "0" && tv_result.text == "-0"){
+                if(inputnum != "0" && tv_result.text == "-0"){
                     input = inputnum.toDouble() * -1
                     trailing0(input.toString())
 
                 }
+               else if ((inputnum != "0" && tv_result.text == "0") || (inputnum != "0" && equal == false && tv_result.text == "0" )) {
+                    tv_result.text = inputnum
+                }
+
                 else if ((inputnum == "0" && tv_result.text !== "0") || (inputnum != "0" && tv_result.text !== "0")) {
                     tv_result.text = tv_result.text.toString() + inputnum
 
@@ -136,7 +137,15 @@ class MainActivity : AppCompatActivity() {
             }
             else if(operator == true){
                 operator = false
-                tv_result.text = inputnum
+                if(inputnum != "0" && tv_result.text == "-0"){
+                    input = inputnum.toDouble() * -1
+                    trailing0(input.toString())
+
+                }
+                else{
+                    tv_result.text = inputnum
+                }
+
             }
 
         }
@@ -171,14 +180,19 @@ class MainActivity : AppCompatActivity() {
                 trailing0(input.toString())
             }
             "%"->{
-                if(input != 0.0 && input2 != 0.0){
+               if(currentoperator == "x" || currentoperator == "/"){
+                   input = input2/100
+                   trailing0(input.toString())
+               }
+               else{
+                   if(input != 0.0 && input2 != 0.0){
                     input = input * input2 /100
                     trailing0(input.toString())
                 }
                 else  if(input == 0.0 && input2 != 0.0) {
-                    input = input/100
+                    input = input2/100
                     trailing0(input.toString())
-                }
+                }}
 
             }
         }
@@ -187,36 +201,46 @@ class MainActivity : AppCompatActivity() {
         operator = true
     }
     fun baseoprtpressed(baseop: String){
-        if(equal != true) {
-            input = tv_result.text.toString().toDouble()
-            if (currentoperator.toString() == "none" ){
-                result = input
-                currentoperator = baseop
+        if(operator == true){
+            currentoperator = baseop.takeLast(1)
+    }
+        else{
+            if(equal != true) {
+                input = tv_result.text.toString().toDouble()
+                if (currentoperator.toString() == "none" ){
+                    result = input
+                    currentoperator = baseop
+                }
+                else if(currentoperator.toString() != "none" && baseop.length <= 1){
+                    calculate(result,input,currentoperator)
+                    currentoperator = baseop
+                }
+                tv_result.text = result.toString().replace(".0","")
+                operator = true
             }
-            else if(currentoperator.toString() != "none" && baseop.length <= 1){
-                calculate(result,input,currentoperator)
+            else{
                 currentoperator = baseop
+                equal = false
             }
-            tv_result.text = result.toString().replace(".0","")
-            operator = true
-        } else{
-            currentoperator = baseop
-            equal = false
         }
+
     }
     fun negpointpressed(symbol:String){
-        input = tv_result.text.toString().toDouble()
+       var input2 = tv_result.text.toString().toDouble()
         if(symbol =="." && "." !in tv_result.text.toString()){
             tv_result.text = tv_result.text.toString() +  "."
         }
         else if(symbol =="+-"){
-            if(result != 0.0 && input > 0.0){
-                input *= -1
-                trailing0(input.toString())
+            if(result != 0.0 && input2 == result && currentoperator != "none"){
+                tv_result.text = "-0"
+            }
+            else if(result != 0.0 && input2 != -0.0){
+                input2 *= -1
+                trailing0(input2.toString())
             }
             else{
-                result *= -1
-                trailing0(result.toString())
+                input2 *= -1
+                trailing0(input2.toString())
             }
 
 
