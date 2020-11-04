@@ -64,11 +64,13 @@ class MainActivity : AppCompatActivity() {
         }
         btn_clear.setOnClickListener(){
             if(btn_clear.text == "AC"){
-                result = 0.0
                 tv_result.setText("0")
-                currentoperator = "none"
-                equal = false
-                operator = false
+                input = 0.0
+                result = 0.0
+                operator= false
+                equal= false
+                currentoperator= "none"
+                clickedop= ""
             }else if(btn_clear.text == "C"){
                 btn_clear.text = "AC"
                 tv_result.text = "0"
@@ -91,29 +93,51 @@ class MainActivity : AppCompatActivity() {
             clickedop += "/"
             baseoprtpressed(clickedop)
         }
-        btn_plusmin.setOnClickListener(){
-            negpointpressed("+-")
-        }
+
         btn_point.setOnClickListener(){
-            negpointpressed(".")
+            if( "." !in tv_result.text.toString()){
+                if(tv_result.text.toString().toDouble() == result){
+                    tv_result.text = "0."
+                }
+                else{
+                    tv_result.text = tv_result.text.toString() +  "."
+                }
+
+            }
         }
         btn_equal.setOnClickListener(){
             equal = true
-            if(currentoperator != "none" && operator == false){
+            if(currentoperator == "^" || currentoperator == "sqrt"){
+                trailing0(calculate(result,input,currentoperator).toString())
+            }
+            else if(currentoperator != "none" && operator == false){
                 input = tv_result.text.toString().toDouble()
                 calculate(result,input,currentoperator)
                 trailing0(result.toString())
                 operator = true
-            } else if (currentoperator !="none" && operator == true){
+            }
+            else if (currentoperator !="none" && operator == true){
                 calculate(result,input,currentoperator)
                 trailing0(result.toString())
             }
+            else if(currentoperator == "none" && operator == false){
+                result = tv_result.text.toString().toDouble()
+                trailing0(result.toString())
+            }
+
 
         }
         btn_percentage.setOnClickListener(){
             simpleoprtpressed("%")
         }
-
+        btn_bckspace.setOnClickListener(){
+            if(equal == false && tv_result.text.toString().toDouble() != result && tv_result.text.toString().length > 1){
+                 tv_result.text =tv_result.text.dropLast(1)
+            }
+            else if(equal == false  && tv_result.text.toString().length == 1){
+                tv_result.text = "0"
+            }
+        }
     }
     fun numbpressed(inputnum:String){
         btn_clear.text = "C"
@@ -129,7 +153,7 @@ class MainActivity : AppCompatActivity() {
                     tv_result.text = inputnum
                 }
 
-                else if ((inputnum == "0" && tv_result.text !== "0") || (inputnum != "0" && tv_result.text !== "0")) {
+                else if ((inputnum == "0" && tv_result.text !== "0") || (inputnum != "0" && tv_result.text !== "0")|| (inputnum != "0" && "." in tv_result.text.toString())) {
                     tv_result.text = tv_result.text.toString() + inputnum
 
                 }
@@ -137,51 +161,63 @@ class MainActivity : AppCompatActivity() {
             }
             else if(operator == true){
                 operator = false
-                if(inputnum != "0" && tv_result.text == "-0"){
-                    input = inputnum.toDouble() * -1
-                    trailing0(input.toString())
-
-                }
-                else{
                     tv_result.text = inputnum
-                }
-
             }
 
         }
-
 
     }
     fun simpleoprtpressed(inputop:String){
         var input2 = tv_result.text.toString().toDouble()
         when(inputop){
             "^" -> {
-                if(inputop == "^") if(equal == false){
+                if(equal == false && result == 0.0){
+                    result =  Math.pow(input2,2.0)
+                    trailing0(result.toString())
+                    currentoperator = "^"
+                }
+                else if ((equal == false && result != 0.0) || (equal != false && result != 0.0)){
+                    operator = false
                     input = Math.pow(input2,2.0)
                     trailing0(input.toString())
                 }
-                else {
-                   input = Math.pow(input2,2.0)
-                    trailing0(input2.toString())
+
+            }
+            "sqrt" -> {
+                if(equal == false && result == 0.0){
+                    result =  Math.sqrt(input2)
+                    trailing0(result.toString())
+                    currentoperator = "sqrt"
                 }
+                else if (equal == false && result != 0.0 || (equal != false && result != 0.0)){
+                    operator = false
+                    input = Math.sqrt(input2).toDouble()
+                    trailing0(input.toString())
+                }
+
+
             }
             "round" -> {
+                operator = true
                 result = Math.round(input2).toDouble()
                 trailing0(result.toString())
             }
             "floor" -> {
+                operator = true
                 result = Math.floor(input2).toDouble()
                 trailing0(result.toString())
             }
             "ceil" -> {result = Math.ceil(input2).toDouble()
                 trailing0(result.toString())
             }
-            "sqrt" -> {
-                input = Math.sqrt(input2).toDouble()
-                trailing0(input.toString())
-            }
+
             "%"->{
+                operator = true
                if(currentoperator == "x" || currentoperator == "/"){
+                   input = input2/100
+                   trailing0(input.toString())
+               }
+               else  if(input == 0.0 && input2 != 0.0) {
                    input = input2/100
                    trailing0(input.toString())
                }
@@ -190,20 +226,19 @@ class MainActivity : AppCompatActivity() {
                     input = input * input2 /100
                     trailing0(input.toString())
                 }
-                else  if(input == 0.0 && input2 != 0.0) {
-                    input = input2/100
-                    trailing0(input.toString())
-                }}
+              }
+
 
             }
         }
 
 
-        operator = true
+
     }
     fun baseoprtpressed(baseop: String){
         if(operator == true){
             currentoperator = baseop.takeLast(1)
+
     }
         else{
             if(equal != true) {
@@ -216,44 +251,25 @@ class MainActivity : AppCompatActivity() {
                     calculate(result,input,currentoperator)
                     currentoperator = baseop
                 }
-                tv_result.text = result.toString().replace(".0","")
+                trailing0(result.toString())
                 operator = true
             }
             else{
                 currentoperator = baseop
-                equal = false
+                operator = true
             }
         }
 
     }
-    fun negpointpressed(symbol:String){
-       var input2 = tv_result.text.toString().toDouble()
-        if(symbol =="." && "." !in tv_result.text.toString()){
-            tv_result.text = tv_result.text.toString() +  "."
-        }
-        else if(symbol =="+-"){
-            if(result != 0.0 && input2 == result && currentoperator != "none"){
-                tv_result.text = "-0"
-            }
-            else if(result != 0.0 && input2 != -0.0){
-                input2 *= -1
-                trailing0(input2.toString())
-            }
-            else{
-                input2 *= -1
-                trailing0(input2.toString())
-            }
 
-
-
-        }
-    }
     fun calculate(result : Double,input: Double,oprt:String): Double {
         when(oprt){
             "+" -> this.result += input
             "-" -> this.result -= input
             "x" -> this.result *= input
             "/" -> this.result /= input
+            "^" -> this.result = Math.pow(result,2.0)
+            "sqrt" -> this.result = Math.sqrt(result)
         }
         return this.result
     }

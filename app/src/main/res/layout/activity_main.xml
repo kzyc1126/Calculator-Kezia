@@ -40,17 +40,16 @@
             >
             >
 
-            <Button
-                android:id="@+id/btn_clear"
-                style="@style/ButtonStyle"
-                android:background="@drawable/operator_button"
-                android:text="AC" />
+
+
 
             <Button
-                android:id="@+id/btn_percentage"
+                android:id="@+id/btn_sqrt"
+                android:text="@string/sqrt"
                 style="@style/ButtonStyle"
                 android:background="@drawable/operator_button"
-                android:text="@string/percent" />
+
+                />
             <Button
                 android:id="@+id/btn_power"
                 style="@style/ButtonStyle"
@@ -61,11 +60,17 @@
 
                 />
             <Button
-                android:id="@+id/btn_sqrt"
-                android:text="@string/sqrt"
+                android:id="@+id/btn_clear"
                 style="@style/ButtonStyle"
                 android:background="@drawable/operator_button"
+                android:text="AC" />
 
+            <Button
+                android:id="@+id/btn_bckspace"
+                style="@style/ButtonStyle"
+                android:paddingLeft="10dp"
+                android:background="@drawable/operator_button"
+                android:drawableLeft="@drawable/clear_symbol_50px"
                 />
 
 
@@ -120,11 +125,11 @@
                 android:textColor="@color/white"
                 />
             <Button
-                android:id="@+id/btn_div"
+                android:id="@+id/btn_percentage"
                 style="@style/ButtonStyle"
                 android:background="@drawable/operator_button"
-                android:text="@string/division"
-                />
+                android:text="@string/percent" />
+
 
         </LinearLayout>
         <LinearLayout
@@ -162,13 +167,13 @@
 
 
                 />
-
             <Button
-                android:id="@+id/btn_time"
+                android:id="@+id/btn_div"
                 style="@style/ButtonStyle"
                 android:background="@drawable/operator_button"
-                android:text="@string/times"
+                android:text="@string/division"
                 />
+
 
 
         </LinearLayout>
@@ -204,11 +209,12 @@
                 android:background="@drawable/num_button"
                 />
             <Button
-                android:id="@+id/btn_min"
+                android:id="@+id/btn_time"
                 style="@style/ButtonStyle"
                 android:background="@drawable/operator_button"
-                android:text="@string/min"
+                android:text="@string/times"
                 />
+
 
 
         </LinearLayout>
@@ -242,11 +248,12 @@
                 android:background="@drawable/num_button"
                 />
             <Button
-                android:id="@+id/btn_plus"
-                android:text="@string/plus"
+                android:id="@+id/btn_min"
                 style="@style/ButtonStyle"
                 android:background="@drawable/operator_button"
+                android:text="@string/min"
                 />
+
 
 
         </LinearLayout>
@@ -261,21 +268,6 @@
 
             >
             >
-
-            <Button
-                android:id="@+id/btn_plusmin"
-                android:text="@string/plusmin"
-                style="@style/ButtonStyle"
-                android:background="@drawable/operator_button"
-                />
-
-            <Button
-                android:id="@+id/btn_0"
-                android:text="@string/button_0"
-                style="@style/ButtonStyle"
-                android:background="@drawable/num_button"
-                />
-
             <Button
                 android:id="@+id/btn_point"
                 android:text="@string/point"
@@ -285,13 +277,26 @@
                 />
 
             <Button
+                android:id="@+id/btn_0"
+                android:text="@string/button_0"
+                style="@style/ButtonStyle"
+                android:background="@drawable/num_button"
+                />
+
+
+            <Button
                 android:id="@+id/btn_equal"
                 android:text="@string/equal"
                 style="@style/ButtonStyle"
                 android:background="@drawable/operator_button"
 
                 />
-
+            <Button
+                android:id="@+id/btn_plus"
+                android:text="@string/plus"
+                style="@style/ButtonStyle"
+                android:background="@drawable/operator_button"
+                />
 
         </LinearLayout>
 
