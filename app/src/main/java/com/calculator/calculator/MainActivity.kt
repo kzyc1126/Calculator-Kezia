@@ -150,6 +150,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+
     }
     fun simpleoprtpressed(inputop:String){
         var input2 = tv_result.text.toString().toDouble()
@@ -257,7 +258,7 @@ class MainActivity : AppCompatActivity() {
         return this.result
     }
     fun trailing0(input:String){
-        if (input.takeLast(2).toString() == ".0"){
+        if (input.takeLast(2).toString() == ".0" ){
             tv_result.text = input.replace(".0","")
         }
         else {
